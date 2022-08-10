@@ -1,16 +1,26 @@
-import React, { useRef, useState } from "react";
+import React, { createContext, useRef, useState } from "react";
 import ShowTodo from "./ShowTodo";
+
+type Todo = {
+  inputValue: string;
+  id: number;
+  checked: boolean;
+};
+// createContextの型宣言。setaStateと連携のために型を合わせる。
+type todoContextType = {
+  todos: Todo[];
+  setTodos: (todos: Todo[]) => void;
+};
+export const todoContext = createContext<todoContextType>({
+  // 初期値は適当に設定
+  todos: [],
+  setTodos: (todos) => {},
+});
 
 function AddTodo() {
   const [todos, setTodos] = useState<Todo[]>([]);
   // 初期値のnullの後ろに「!」をつけて、null型ではないことを宣言
   const inputRef = useRef<HTMLInputElement>(null!);
-
-  type Todo = {
-    inputValue: string;
-    id: number;
-    checked: boolean;
-  };
 
   const submitTodo = () => {
     setTodos([
@@ -36,7 +46,9 @@ function AddTodo() {
         className="submitButton"
         onClick={(e) => submitTodo()}
       />
-      <ShowTodo todos={todos} />
+      <todoContext.Provider value={{ todos, setTodos }}>
+        <ShowTodo todos={todos} />
+      </todoContext.Provider>
     </div>
   );
 }

@@ -21,8 +21,13 @@
   display: flex;
   align-items: center;
   margin-bottom: 10px;
+  font-size: 20px;
 }
 
 .todoList li input {
   padding: 7px;
+}
+
+.todoValue {
+  margin-left: 20px;
 }
