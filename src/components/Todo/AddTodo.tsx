@@ -1,4 +1,4 @@
-import React, { createContext, useRef, useState } from "react";
+import React, { createContext, useEffect, useRef, useState } from "react";
 import ShowTodo from "./ShowTodo";
 
 type Todo = {
@@ -21,6 +21,10 @@ function AddTodo() {
   const [todos, setTodos] = useState<Todo[]>([]);
   // 初期値のnullの後ろに「!」をつけて、null型ではないことを宣言
   const inputRef = useRef<HTMLInputElement>(null!);
+
+  useEffect(() => {
+    console.log(todos);
+  }, [todos]);
 
   const submitTodo = () => {
     setTodos([

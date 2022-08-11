@@ -20,6 +20,13 @@ function ShowTodo(props: Props) {
     );
   };
 
+  const handleDelete = (id: number) => {
+    setTodos(
+      // filterでidが一致位するもののみ除外
+      todos.filter((todo) => todo.id !== id)
+    );
+  };
+
   return (
     <ul className="todoList">
       {props.todos.map((todo) => (
@@ -30,6 +37,7 @@ function ShowTodo(props: Props) {
             onChange={() => handleChecked(todo.id, todo.checked)}
           />
           <div className="todoValue">{todo.inputValue}</div>
+          <button onClick={() => handleDelete(todo.id)}>消</button>
         </li>
       ))}
     </ul>

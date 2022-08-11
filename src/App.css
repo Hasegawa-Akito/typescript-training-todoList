@@ -17,11 +17,14 @@
 }
 
 .todoList li {
-  width: 10%;
+  width: 100%;
   display: flex;
-  align-items: center;
   margin-bottom: 10px;
   font-size: 20px;
+}
+
+.todoList ul {
+  width: 10%;
 }
 
 .todoList li input {
@@ -29,5 +32,6 @@
 }
 
 .todoValue {
+  width: 60%;
   margin-left: 20px;
 }
