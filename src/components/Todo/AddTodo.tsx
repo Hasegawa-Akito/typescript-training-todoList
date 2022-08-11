@@ -8,11 +8,11 @@ type Todo = {
   checked: boolean;
 };
 // createContextの型宣言。setaStateと連携のために型を合わせる。
-type todoContextType = {
+type TodoContextType = {
   todos: Todo[];
   setTodos: (todos: Todo[]) => void;
 };
-export const todoContext = createContext<todoContextType>({
+export const TodoContext = createContext<TodoContextType>({
   // 初期値は適当に設定
   todos: [],
   setTodos: (todos) => {},
@@ -54,9 +54,9 @@ function AddTodo() {
         className="submitButton"
         onClick={(e) => submitTodo()}
       />
-      <todoContext.Provider value={{ todos, setTodos }}>
+      <TodoContext.Provider value={{ todos, setTodos }}>
         <ShowTodo todos={todos} />
-      </todoContext.Provider>
+      </TodoContext.Provider>
     </div>
   );
 }
