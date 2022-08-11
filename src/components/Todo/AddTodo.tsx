@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useRef, useState } from "react";
 import ShowTodo from "./ShowTodo";
+import "../../assets/css/Todo.css";
 
 type Todo = {
   inputValue: string;

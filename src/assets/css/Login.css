@@ -1,0 +1,8 @@
+.loginButton {
+  padding: 0;
+  border: none;
+  opacity: 1;
+}
+.loginButton:hover {
+  opacity: 0.6;
+}
