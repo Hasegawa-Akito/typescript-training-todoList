@@ -27,11 +27,14 @@ function AddTodo() {
   }, [todos]);
 
   const submitTodo = () => {
+    // 配列の中が空ならidは0、そうでないなら最後の次のidを設定
+    const lastId = todos.length === 0 ? 0 : todos[todos.length - 1].id + 1;
+
     setTodos([
       ...todos,
       {
         inputValue: inputRef.current.value,
-        id: todos.length,
+        id: lastId,
         checked: false,
       },
     ]);
