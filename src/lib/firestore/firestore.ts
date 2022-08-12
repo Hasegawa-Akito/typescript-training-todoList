@@ -3,9 +3,9 @@ import {
   where,
   collection,
   getDocs,
-  doc,
-  setDoc,
   addDoc,
+  setDoc,
+  doc,
   updateDoc,
 } from "firebase/firestore/lite";
 import { db } from "../../firebase";
@@ -34,11 +34,35 @@ export const getTodos = async (uid: string): Promise<Todo[]> => {
   return todoDatas;
 };
 
+// todo追加用
 export const addTodo = async (uid: string, addValues: Todo): Promise<void> => {
-  // async関数では戻り値をPromise<>で設定
   await addDoc(collection(db, "todoList"), {
     uid: uid,
     todo: addValues.inputValue,
     id: addValues.id,
   });
+};
+
+// todoにチェック入れる用
+export const checkTodo = async (
+  uid: string,
+  id: Number,
+  checked: boolean
+): Promise<void> => {
+  const q = query(
+    collection(db, "todoList"),
+    where("uid", "==", uid),
+    where("id", "==", id)
+  );
+
+  // whereの条件に合うドキュメントのIDを取得
+  const docSnap = await getDocs(q);
+
+  await setDoc(
+    doc(db, "todoList", docSnap.docs[0].id),
+    {
+      checked: checked,
+    },
+    { merge: true } // merge: trueで一部のみ更新
+  );
 };

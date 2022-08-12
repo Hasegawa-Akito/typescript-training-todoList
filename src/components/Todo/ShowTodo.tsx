@@ -1,5 +1,7 @@
 import { useContext } from "react";
 import { TodoContext } from "./AddTodo";
+import { UserContext } from "../../App";
+import { checkTodo } from "../../lib/firestore/firestore";
 
 type Todo = {
   inputValue: string;
@@ -13,11 +15,21 @@ type Props = {
 // propsの型宣言時は注意
 function ShowTodo(props: Props) {
   const { todos, setTodos } = useContext(TodoContext);
+  const { userInfo, setUserInfo } = useContext(UserContext);
+
   const handleChecked = (id: number, checked: boolean) => {
-    setTodos(
-      // mapでidの一致するとき更新。オブジェクトのcheckedのみ更新
-      todos.map((todo) => (todo.id === id ? { ...todo, checked: true } : todo))
-    );
+    checkTodo(userInfo.uid, id, !checked)
+      .then(() => {
+        setTodos(
+          // mapでidの一致するとき更新。オブジェクトのcheckedのみ更新
+          todos.map((todo) =>
+            todo.id === id ? { ...todo, checked: !checked } : todo
+          )
+        );
+      })
+      .catch((e) => {
+        alert("変更できませんでした。");
+      });
   };
 
   const handleDelete = (id: number) => {
