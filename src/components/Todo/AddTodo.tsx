@@ -1,6 +1,6 @@
 import { useContext, createContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../../App";
-import { getTodos } from "../../lib/firestore/firestore";
+import { getTodos, addTodo } from "../../lib/firestore/firestore";
 import ShowTodo from "./ShowTodo";
 import "../../assets/css/Todo.css";
 
@@ -36,6 +36,7 @@ function AddTodo() {
         alert("データが取得できませんでした");
       }
     };
+
     getDB();
   }, []);
 
@@ -43,17 +44,21 @@ function AddTodo() {
     // 配列の中が空ならidは0、そうでないなら最後の次のidを設定
     const lastId = todos.length === 0 ? 0 : todos[todos.length - 1].id + 1;
 
-    setTodos([
-      ...todos,
-      {
-        inputValue: inputRef.current.value,
-        id: lastId,
-        checked: false,
-      },
-    ]);
+    const addValues = {
+      inputValue: inputRef.current.value,
+      id: lastId,
+      checked: false,
+    };
 
-    // input内の初期化
-    inputRef.current.value = "";
+    addTodo(userInfo.uid, addValues) // firestoreに追加
+      .then(() => {
+        setTodos([...todos, addValues]); // stateにセット
+        inputRef.current.value = ""; // input内の初期化
+      })
+      .catch((e) => {
+        console.log(e);
+        alert("追加できませんでした");
+      });
   };
 
   return (
