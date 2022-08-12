@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { TodoContext } from "./AddTodo";
 import { UserContext } from "../../App";
-import { checkTodo } from "../../lib/firestore/firestore";
+import { checkTodo, deleteTodo } from "../../lib/firestore/firestore";
 
 type Todo = {
   inputValue: string;
@@ -33,10 +33,16 @@ function ShowTodo(props: Props) {
   };
 
   const handleDelete = (id: number) => {
-    setTodos(
-      // filterでidが一致位するもののみ除外
-      todos.filter((todo) => todo.id !== id)
-    );
+    deleteTodo(userInfo.uid, id)
+      .then(() => {
+        setTodos(
+          // filterでidが一致位するもののみ除外
+          todos.filter((todo) => todo.id !== id)
+        );
+      })
+      .catch((e) => {
+        alert("除去できませんでした");
+      });
   };
 
   return (
