@@ -1,4 +1,6 @@
-import React, { createContext, useEffect, useRef, useState } from "react";
+import { useContext, createContext, useEffect, useRef, useState } from "react";
+import { UserContext } from "../../App";
+import { getTodos } from "../../lib/firestore/firestore";
 import ShowTodo from "./ShowTodo";
 import "../../assets/css/Todo.css";
 
@@ -19,13 +21,23 @@ export const TodoContext = createContext<TodoContextType>({
 });
 
 function AddTodo() {
+  const { userInfo, setUserInfo } = useContext(UserContext);
   const [todos, setTodos] = useState<Todo[]>([]);
   // 初期値のnullの後ろに「!」をつけて、null型ではないことを宣言
   const inputRef = useRef<HTMLInputElement>(null!);
 
   useEffect(() => {
-    console.log(todos);
-  }, [todos]);
+    // データをfirestoreから取得
+    const getDB = async () => {
+      try {
+        const todos_db = await getTodos(userInfo.uid);
+        setTodos(todos_db);
+      } catch (e) {
+        alert("データが取得できませんでした");
+      }
+    };
+    getDB();
+  }, []);
 
   const submitTodo = () => {
     // 配列の中が空ならidは0、そうでないなら最後の次のidを設定
